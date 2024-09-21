@@ -20,10 +20,10 @@ app.get('/', async (req, res) => {
     }
 })
 
-app.get('/user', async (req, res) => {
-    const username = req.query.username;
+app.get('/selectItem', async (req, res) => {
+    const itemName = req.query.itemName;
     try{
-        const data = await pool.query(`SELECT * FROM ${databaseName} WHERE username = $1`, [username]);
+        const data = await pool.query(`SELECT * FROM ${databaseName} WHERE itemName = $1`, [itemName]);
         res.status(200).send(data.rows);
     } catch (err){
         console.log(err);
@@ -32,16 +32,16 @@ app.get('/user', async (req, res) => {
 })
 
 
-app.post('/new', async (req, res) => {
+app.post('/addItem', async (req, res) => {
     // possible post request with possible body:
     // localhost:3000/
     // {
     //     "name":"Friedensschule",
     //     "location": "Duesseldorf"
     // }
-    const { username, text } = req.body
+    const { item, price, description } = req.body
     try {
-        await pool.query(`INSERT INTO ${databaseName} (username, text) VALUES ($1, $2)`, [username, text])
+        await pool.query(`INSERT INTO ${databaseName} (item, price, description) VALUES ($1, $2, $3)`, [item, price, description])
         res.status(200).send({ message: "Successfully added child" })
     } catch (err) {
         console.log(err)
