@@ -32,6 +32,18 @@ app.get('/selectItem', async (req, res) => {
 })
 
 
+app.delete('/deleteItem', async (req, res) => {
+    const itemName = req.query.itemName;
+    try {
+        const data = await pool.query(`DELETE FROM ${databaseName} WHERE item = $1`, [itemName]);
+        res.status(200).send(`Item ${itemName} deleted`);
+    } catch (err) {
+        console.log(err);
+        res.sendStatus(500);
+    }
+});
+
+
 app.post('/addItem', async (req, res) => {
     // possible post request with possible body:
     // localhost:3000/
